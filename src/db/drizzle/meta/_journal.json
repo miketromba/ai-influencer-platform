@@ -15,6 +15,20 @@
       "when": 1757201011027,
       "tag": "0001_lush_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757270660592,
+      "tag": "0002_nice_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1757272966635,
+      "tag": "0003_flimsy_gauntlet",
+      "breakpoints": true
     }
   ]
 }
