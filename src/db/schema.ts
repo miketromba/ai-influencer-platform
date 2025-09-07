@@ -1,6 +1,38 @@
 // db/schema.ts
 import { pgTable, text, timestamp, uuid, index } from 'drizzle-orm/pg-core'
 
+// Influencers table
+export const influencers = pgTable('influencers', {
+	id: uuid('id').primaryKey(),
+	user_id: uuid('user_id').references(() => profiles.id),
+	name: text('name').notNull(),
+	description: text('description').notNull(),
+	profile_image: text('description').notNull(),
+	created_at: timestamp('created_at', {
+		mode: 'date',
+		withTimezone: true
+	})
+		.defaultNow()
+		.notNull()
+})
+
+// Assets table (images, videos, audio, etc. files that we generate)
+export const assets = pgTable('assets', {
+	id: uuid('id').primaryKey(),
+	user_id: uuid('user_id').references(() => profiles.id),
+	influencer_id: uuid('influencer_id').references(() => influencers.id),
+	asset_type: text('asset_type', {
+		enum: ['image', 'video', 'audio']
+	}).notNull(),
+	asset_url: text('asset_url').notNull(),
+	created_at: timestamp('created_at', {
+		mode: 'date',
+		withTimezone: true
+	})
+		.defaultNow()
+		.notNull()
+})
+
 // User profiles table linked to auth.users
 export const profiles = pgTable(
 	'profiles',

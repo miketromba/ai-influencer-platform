@@ -60,7 +60,7 @@ export function AuthForm({
 					token: otp
 				})
 				if (error) throw error
-				router.push('/protected')
+				router.push('/app')
 				return
 			}
 		} catch (error: unknown) {
