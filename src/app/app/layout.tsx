@@ -60,7 +60,9 @@ export default function ProtectedLayout({
 				<SidebarRail />
 			</Sidebar>
 			<SidebarInset>
-				<div className="flex-1 p-6">{children}</div>
+				<div className="flex-1 p-6 overflow-y-auto flex">
+					{children}
+				</div>
 			</SidebarInset>
 		</SidebarProvider>
 	)

@@ -7,7 +7,7 @@ export const influencers = pgTable('influencers', {
 	user_id: uuid('user_id').references(() => profiles.id),
 	name: text('name').notNull(),
 	description: text('description').notNull(),
-	profile_image: text('description').notNull(),
+	profile_image: text('profile_image').notNull(),
 	created_at: timestamp('created_at', {
 		mode: 'date',
 		withTimezone: true

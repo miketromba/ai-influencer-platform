@@ -5,3 +5,5 @@ alwaysApply: true
 ---
 
 Always use shadcn components where possible when working on the user interface (located in src/components/ui)
+
+Also we use lucide icons in our project
