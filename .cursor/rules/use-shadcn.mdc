@@ -1,0 +1,7 @@
+---
+description: Always use shadcn components where possible when working on the user interface (located in src/components/ui)
+globs: *.tsx
+alwaysApply: true
+---
+
+Always use shadcn components where possible when working on the user interface (located in src/components/ui)

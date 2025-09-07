@@ -24,10 +24,10 @@ export function SidebarInfluencerList() {
 		<SidebarMenu>
 			{placeholderInfluencers.map(influencer => (
 				<SidebarMenuItem key={influencer.id}>
-					<SidebarMenuButton asChild>
+					<SidebarMenuButton asChild size="lg" className="gap-3 px-3">
 						<Link href={`/app/influencers/${influencer.id}`}>
-							<Avatar className="size-7">
-								<AvatarFallback className="text-[10px]">
+							<Avatar className="size-9 shrink-0">
+								<AvatarFallback className="text-xs">
 									{influencer.name
 										.split(' ')
 										.map(part => part[0])
