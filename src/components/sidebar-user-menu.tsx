@@ -26,9 +26,11 @@ export function SidebarUserMenu() {
 	const { state } = useSidebar()
 	const isCollapsed = state === 'collapsed'
 
+	const [isMounted, setIsMounted] = useState(false)
 	const [user, setUser] = useState<SupabaseUser | null>(null)
 
 	useEffect(() => {
+		setIsMounted(true)
 		const supabase = createClient()
 
 		let ignore = false
@@ -72,6 +74,8 @@ export function SidebarUserMenu() {
 		await supabase.auth.signOut()
 		router.push('/auth/login')
 	}
+
+	if (!isMounted) return null
 
 	return (
 		<DropdownMenu>

@@ -1,9 +1,9 @@
 type PageProps = {
-	params: { id: string }
+	params: Promise<{ id: string }>
 }
 
-export default function InfluencerPage({ params }: PageProps) {
-	const { id } = params
+export default async function InfluencerPage({ params }: PageProps) {
+	const { id } = await params
 	return (
 		<div className="flex-1">
 			<div className="text-sm text-muted-foreground">Influencer ID</div>
