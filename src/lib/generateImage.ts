@@ -21,8 +21,8 @@ function toBase64(data: Buffer | Uint8Array | string): string {
 }
 
 function ensureApiKey() {
-	if (!process.env.GEMINI_API_KEY) {
-		throw new Error('GEMINI_API_KEY is not set')
+	if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+		throw new Error('GOOGLE_GENERATIVE_AI_API_KEY is not set')
 	}
 }
 
@@ -45,7 +45,9 @@ export async function generateImage(
 	options?: { images?: InputImage | InputImage[]; model?: string }
 ): Promise<GeneratedImage> {
 	ensureApiKey()
-	const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+	const ai = new GoogleGenAI({
+		apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY
+	})
 	const model = options?.model ?? MODEL_ID
 
 	const providedImages = options?.images

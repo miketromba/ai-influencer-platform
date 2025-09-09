@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
 	SidebarMenu,
@@ -6,23 +9,31 @@ import {
 	SidebarMenuItem
 } from '@/components/ui/sidebar'
 
-type Influencer = {
-	id: string
-	name: string
-}
-
-const placeholderInfluencers: Influencer[] = [
-	{ id: '1', name: 'Alice Johnson' },
-	{ id: '2', name: 'Brian Chen' },
-	{ id: '3', name: 'Carmen Díaz' },
-	{ id: '4', name: 'Diego Rossi' },
-	{ id: '5', name: 'Eva Müller' }
-]
+import { useInfluencersList } from '@/api/client/influencers'
 
 export function SidebarInfluencerList() {
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useInfluencersList({ pageSize: 20 })
+
+	const sentinelRef = useRef<HTMLDivElement | null>(null)
+	useEffect(() => {
+		if (!sentinelRef.current) return
+		const el = sentinelRef.current
+		const io = new IntersectionObserver(entries => {
+			const first = entries[0]
+			if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
+				fetchNextPage()
+			}
+		})
+		io.observe(el)
+		return () => io.disconnect()
+	}, [fetchNextPage, hasNextPage, isFetchingNextPage])
+
+	const items = data?.pages.flatMap(p => p.items) ?? []
+
 	return (
 		<SidebarMenu>
-			{placeholderInfluencers.map(influencer => (
+			{items.map(influencer => (
 				<SidebarMenuItem key={influencer.id}>
 					<SidebarMenuButton asChild size="lg" className="gap-3 px-3">
 						<Link href={`/app/influencers/${influencer.id}`}>
@@ -41,6 +52,7 @@ export function SidebarInfluencerList() {
 					</SidebarMenuButton>
 				</SidebarMenuItem>
 			))}
+			<div ref={sentinelRef} />
 		</SidebarMenu>
 	)
 }

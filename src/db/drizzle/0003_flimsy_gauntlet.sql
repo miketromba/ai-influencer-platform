@@ -1,1 +1,0 @@
-ALTER TABLE "influencers" DROP COLUMN "profile_image";

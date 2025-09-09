@@ -1,3 +1,5 @@
+-- Custom SQL migration file, put your code below! --
+
 -- Enable RLS (idempotent)
 ALTER TABLE "profiles" ENABLE ROW LEVEL SECURITY;
 

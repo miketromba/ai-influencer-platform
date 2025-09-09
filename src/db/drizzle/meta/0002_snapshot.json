@@ -1,6 +1,6 @@
 {
-  "id": "d79809b9-9ee3-4b8d-8e20-df5bdac4eb36",
-  "prevId": "d7309f7f-3722-45d2-aced-e1040a27f34e",
+  "id": "c824d9a4-a1b6-4ff8-baa5-983a7693a864",
+  "prevId": "875948a7-4c55-4bf5-94f1-fad81608ce51",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -51,28 +51,28 @@
         "assets_user_id_profiles_id_fk": {
           "name": "assets_user_id_profiles_id_fk",
           "tableFrom": "assets",
-          "tableTo": "profiles",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "profiles",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "assets_influencer_id_influencers_id_fk": {
           "name": "assets_influencer_id_influencers_id_fk",
           "tableFrom": "assets",
-          "tableTo": "influencers",
           "columnsFrom": [
             "influencer_id"
           ],
+          "tableTo": "influencers",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -115,12 +115,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "profile_image": {
-          "name": "profile_image",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -134,15 +128,15 @@
         "influencers_user_id_profiles_id_fk": {
           "name": "influencers_user_id_profiles_id_fk",
           "tableFrom": "influencers",
-          "tableTo": "profiles",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "profiles",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -213,9 +207,9 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "with": {},
           "method": "btree",
-          "with": {}
+          "concurrently": false
         },
         "profiles_email_idx": {
           "name": "profiles_email_idx",
@@ -228,9 +222,9 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "with": {},
           "method": "btree",
-          "with": {}
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -243,10 +237,10 @@
   },
   "enums": {},
   "schemas": {},
+  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

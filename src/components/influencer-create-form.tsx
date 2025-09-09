@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Check, Upload } from 'lucide-react'
+import { Check, Upload, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { createInfluencerAction } from '@/app/app/actions'
+import { useCreateInfluencer } from '@/api/client/influencers'
 import { useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -38,6 +38,10 @@ type InfluencerFormValues = z.infer<typeof formSchema>
 export function InfluencerCreateForm() {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [submitError, setSubmitError] = useState<string | null>(null)
+	const router = require('next/navigation').useRouter()
+	const { mutateAsync } = useCreateInfluencer()
 	const form = useForm<InfluencerFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -48,18 +52,31 @@ export function InfluencerCreateForm() {
 	})
 
 	async function onSubmit(values: InfluencerFormValues) {
-		const formData = new FormData()
-		formData.append('name', values.name)
-		formData.append('description', values.description)
-		if (values.image) formData.append('image', values.image)
-		await createInfluencerAction(formData)
-		form.reset({
-			name: '',
-			description: '',
-			image: undefined,
-			imageMode: 'generate'
-		})
-		setPreviewUrl(null)
+		setSubmitError(null)
+		setIsSubmitting(true)
+		try {
+			const formData = new FormData()
+			formData.append('name', values.name)
+			formData.append('description', values.description)
+			if (values.image) formData.append('image', values.image)
+			const res = await mutateAsync(formData)
+			if (res.ok && res.id) {
+				form.reset({
+					name: '',
+					description: '',
+					image: undefined,
+					imageMode: 'generate'
+				})
+				setPreviewUrl(null)
+				router.push(`/app/influencers/${res.id}`)
+				return
+			}
+			setSubmitError('Something went wrong.')
+		} catch (err: any) {
+			setSubmitError(err?.message || 'Unexpected error occurred.')
+		} finally {
+			setIsSubmitting(false)
+		}
 	}
 
 	return (
@@ -79,6 +96,11 @@ export function InfluencerCreateForm() {
 						onSubmit={form.handleSubmit(onSubmit)}
 						className="space-y-6"
 					>
+						{submitError ? (
+							<div className="text-sm text-destructive">
+								{submitError}
+							</div>
+						) : null}
 						<FormField
 							control={form.control}
 							name="name"
@@ -87,6 +109,7 @@ export function InfluencerCreateForm() {
 									<FormLabel>Name</FormLabel>
 									<FormControl>
 										<Input
+											disabled={isSubmitting}
 											className="h-12 text-base"
 											placeholder="e.g. Nova Star"
 											{...field}
@@ -104,6 +127,7 @@ export function InfluencerCreateForm() {
 									<FormLabel>Description</FormLabel>
 									<FormControl>
 										<Textarea
+											disabled={isSubmitting}
 											placeholder="Describe their personality, style, and vibe."
 											className="min-h-32 text-base py-3"
 											{...field}
@@ -241,8 +265,19 @@ export function InfluencerCreateForm() {
 							)}
 						/>
 						<div className="flex justify-end">
-							<Button type="submit" className="h-12 text-base">
-								Create influencer
+							<Button
+								disabled={isSubmitting}
+								type="submit"
+								className="h-12 text-base"
+							>
+								{isSubmitting ? (
+									<>
+										<Loader2 className="mr-2 size-4 animate-spin" />
+										Creating...
+									</>
+								) : (
+									'Create influencer'
+								)}
 							</Button>
 						</div>
 					</form>
