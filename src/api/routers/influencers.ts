@@ -84,6 +84,46 @@ export const influencersRouter = new Hono()
 		})
 	})
 
+	// GET /influencers/:id - fetch single influencer details
+	.get(
+		'/:id',
+		zValidator('param', z.object({ id: z.string().uuid() })),
+		async c => {
+			const user = await getAuthUser(c)
+			const { id } = c.req.valid('param')
+
+			const row = await db
+				.select({
+					id: schema.influencers.id,
+					name: schema.influencers.name,
+					description: schema.influencers.description,
+					main_image: schema.influencers.main_image,
+					created_at: schema.influencers.created_at
+				})
+				.from(schema.influencers)
+				.where(
+					and(
+						eq(schema.influencers.id, id),
+						eq(schema.influencers.user_id, user.id)
+					)
+				)
+				.limit(1)
+
+			if (!row.length) {
+				return c.json({ ok: false, error: 'Not found' }, 404)
+			}
+
+			const r = row[0]
+			return c.json({
+				id: r.id,
+				name: r.name,
+				description: r.description,
+				main_image: r.main_image,
+				created_at: r.created_at ? r.created_at.toISOString() : null
+			})
+		}
+	)
+
 	// POST /influencers - create influencer from formdata
 	.post('/', async c => {
 		const user = await getAuthUser(c)
